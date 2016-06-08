@@ -1,0 +1,85 @@
+buildscript {
+  repositories { jcenter() }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.1'
+  }
+}
+
+plugins {
+  id "com.github.johnrengelman.shadow" version "1.2.3"
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'jacoco'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'findbugs'
+repositories {
+    mavenCentral()
+    maven {
+    	url 'https://raw.github.com/Ekito/maven-repo/master/releases'
+    }
+    maven {
+	url 'http://maven.openimaj.org'
+  }
+}
+sourceCompatibility = 1.8
+version = 'latest-SNAPSHOT'
+ext.mainClass = 'dlTest.Main'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'dlTest',
+                   'Implementation-Version': version,
+                   'Main-Class': 'dlTest.Main'
+    }
+}
+findbugs{
+	sourceSets = [sourceSets.main]
+	ignoreFailures = true
+}
+dependencies {
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    compile group: 'org.deeplearning4j', name: 'deeplearning4j-core', version: '0.4-rc3.10'
+    compile group: 'org.deeplearning4j', name: 'deeplearning4j-ui-components', version: '0.4-rc3.10'
+    compile group: 'org.deeplearning4j', name: 'dl4j-caffe', version: '0.4-rc3.10'
+    compile fileTree(dir: 'lib').matching { include '*.jar'}
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testCompile 'commons-io:commons-io:2.4'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src'
+            include '**/*.txt'
+        }
+    }
+    test {
+            java {
+        	srcDir 'test/src'
+        }
+    }
+}
+
+jacoco {
+    toolVersion = "0.7.4.201502262128"
+    reportsDir = file("build/test-results")
+}
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "build/codecovHtml"
+    }
+}
+test {
+  maxParallelForks=4
+  forkEvery=1
+  maxHeapSize = "512m"
+}
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.4'
+}
