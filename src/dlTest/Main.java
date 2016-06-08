@@ -33,27 +33,27 @@ public class Main {
             .gradientNormalization(GradientNormalization.ClipElementWiseAbsoluteValue)
             .gradientNormalizationThreshold(1.0d)
             .weightInit(WeightInit.XAVIER)
-            .iterations(1000)
+            .iterations(10)
             .momentum(0.5)
             .momentumAfter(Collections.singletonMap(3, 0.9))
             .optimizationAlgo(OptimizationAlgorithm.CONJUGATE_GRADIENT)
             .list()
             .layer(0, new RBM.Builder()
-                    .nIn(100).nOut(100)
+                    .nIn(784).nOut(300)
                     .lossFunction(LossFunctions.LossFunction.RMSE_XENT)
                     .visibleUnit(RBM.VisibleUnit.BINARY)
                     .hiddenUnit(RBM.HiddenUnit.BINARY)
                     .build()
             )
             .layer(1, new RBM.Builder()
-                    .nIn(100).nOut(100)
+                    .nIn(300).nOut(300)
                     .lossFunction(LossFunctions.LossFunction.RMSE_XENT)
                     .visibleUnit(RBM.VisibleUnit.BINARY)
                     .hiddenUnit(RBM.HiddenUnit.BINARY)
                     .build()
             )
             .layer(2, new RBM.Builder()
-                    .nIn(100).nOut(100)
+                    .nIn(300).nOut(300)
                     .lossFunction(LossFunctions.LossFunction.RMSE_XENT)
                     .visibleUnit(RBM.VisibleUnit.BINARY)
                     .hiddenUnit(RBM.HiddenUnit.BINARY)
@@ -61,7 +61,7 @@ public class Main {
             )
             .layer(0, new OutputLayer.Builder(LossFunction.NEGATIVELOGLIKELIHOOD)
                     .activation("softmax")
-                    .nIn(100).nOut(100).build())
+                    .nIn(300).nOut(300).build())
             .pretrain(true).backprop(false)
             .build();
     
@@ -72,11 +72,11 @@ public class Main {
 
     log("Loading data...");
     
-    DataSetIterator dataIter = new MnistDataSetIterator(10, 100, true);
+    DataSetIterator dataIter = new MnistDataSetIterator(300, 100, true);
     
     log("Training model...");
     
-    model.setListeners(Collections.singletonList((IterationListener) new ScoreIterationListener(10)));
+    model.setListeners(Collections.singletonList((IterationListener) new ScoreIterationListener(100)));
     model.fit(dataIter);
   
   }

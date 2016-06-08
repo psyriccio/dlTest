@@ -50,6 +50,8 @@ configurations {
 
 dependencies {
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    compile 'org.nd4j:nd4j-native:0.4-rc3.10'
+    compile 'org.nd4j:nd4j-native:0.4-rc3.10:linux-x86_64'
     compile group: 'org.deeplearning4j', name: 'deeplearning4j-core', version: '0.4-rc3.10'
     compile group: 'org.deeplearning4j', name: 'deeplearning4j-ui-components', version: '0.4-rc3.10'
     compile group: 'org.deeplearning4j', name: 'dl4j-caffe', version: '0.4-rc3.10'
