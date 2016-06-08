@@ -15,15 +15,21 @@ apply plugin: 'jacoco'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'findbugs'
 repositories {
+    maven {
+      url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
     mavenCentral()
     maven {
-    	url 'https://raw.github.com/Ekito/maven-repo/master/releases'
+      url 'https://raw.github.com/Ekito/maven-repo/master/releases'
     }
     maven {
-	url 'http://maven.openimaj.org'
-  }
+      url 'http://maven.openimaj.org'
+    }
+    maven {
+      url 'http://oss.sonatype.org/service/local/staging/deploy/maven2'
+    }
 }
-sourceCompatibility = 1.8
+sourceCompatibility = 1.7
 version = 'latest-SNAPSHOT'
 ext.mainClass = 'dlTest.Main'
 jar {
@@ -37,6 +43,11 @@ findbugs{
 	sourceSets = [sourceSets.main]
 	ignoreFailures = true
 }
+
+configurations {
+    all*.exclude group: 'org.bytedeco', module: 'javacpp-presets'
+}
+
 dependencies {
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
     compile group: 'org.deeplearning4j', name: 'deeplearning4j-core', version: '0.4-rc3.10'
